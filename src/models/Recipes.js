@@ -8,21 +8,21 @@ const recipeSchema = mongoose.Schema({
   ingredients: [
     {
       type: String,
-      required: true,
+      required: false,
     },
   ],
   instructions: {
     type: String,
-    required: true,
+    required: false,
   },
 
   imageUrl: {
     type: String,
-    required: true,
+    required: false,
   },
   cookingTime: {
     type: Number,
-    required: true,
+    required: false,
   },
   userOwner: {
     type: mongoose.Schema.Types.ObjectId,
