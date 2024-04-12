@@ -69,6 +69,19 @@ router.put("/", async (req, res) => {
   }
 });
 
+// Delete a saved Recipe
+router.delete("/:userId/savedRecipes/:recipeId", async (req, res) => {
+  const { userId, recipeId } = req.params;
+  try {
+    const user = await UserModel.findById(userId);
+    user.savedRecipes.pull(recipeId);
+    await user.save();
+    res.status(200).json({ message: "Saved recipe removed successfully" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // Get id of saved recipes
 router.get("/savedRecipes/ids/:userId", async (req, res) => {
   try {
