@@ -69,6 +69,28 @@ router.put("/", async (req, res) => {
   }
 });
 
+// Update a recipe by ID
+router.put("/:recipeId", verifyToken, async (req, res) => {
+  const { recipeId } = req.params;
+  const updatedRecipeData = req.body; // Assuming the frontend sends the updated recipe data
+  
+  try {
+    const updatedRecipe = await RecipesModel.findByIdAndUpdate(
+      recipeId,
+      updatedRecipeData,
+      { new: true }
+    );
+
+    if (!updatedRecipe) {
+      return res.status(404).json({ message: "Recipe not found" });
+    }
+
+    res.status(200).json({ updatedRecipe });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // Delete a saved Recipe
 router.delete("/:userId/savedRecipes/:recipeId", async (req, res) => {
   const { userId, recipeId } = req.params;
