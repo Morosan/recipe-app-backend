@@ -69,8 +69,27 @@ router.put("/", async (req, res) => {
   }
 });
 
+router.put("/:userId/recipes/:recipeId", async (req, res) => {
+  const { userId, recipeId } = req.params;
+
+  try {
+    const user = await UserModel.findById(userId);
+
+    // Check if the user owns the recipe
+    // if (!user.personalRecipes.includes(recipeId)) {
+    //   return res.status(403).json({ message: "You are not authorized to edit this recipe." });
+    // }
+
+    const recipe = await RecipesModel.findByIdAndUpdate(recipeId, req.body, { new: true });
+
+    res.status(200).json({ updatedRecipe: recipe });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // Delete a saved Recipe
-router.delete("/:userId/savedRecipes/:recipeId", async (req, res) => {
+router.delete("/:userId/savedRecipes/:recipeId", verifyToken, async (req, res) => {
   const { userId, recipeId } = req.params;
   try {
     const user = await UserModel.findById(userId);
