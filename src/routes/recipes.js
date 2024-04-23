@@ -101,6 +101,20 @@ router.delete("/:userId/savedRecipes/:recipeId", verifyToken, async (req, res) =
   }
 });
 
+// Delete a recipe by ID
+router.delete("/:recipeId", verifyToken, async (req, res) => {
+  const { recipeId } = req.params;
+
+  try {
+    // Delete the recipe
+    await RecipesModel.findByIdAndDelete(recipeId);
+
+    res.status(200).json({ message: "Recipe deleted successfully" });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 // Get id of saved recipes
 router.get("/savedRecipes/ids/:userId", async (req, res) => {
   try {
