@@ -101,24 +101,11 @@ router.delete("/:userId/savedRecipes/:recipeId", verifyToken, async (req, res) =
   }
 });
 
-// Delete a recipe by ID if the user is the creator
-router.delete("/:userId/recipes/:recipeId", verifyToken, async (req, res) => {
-  const { userId, recipeId } = req.params;
+// Delete a recipe by ID
+router.delete("/:recipeId", verifyToken, async (req, res) => {
+  const { recipeId } = req.params;
 
   try {
-    // Find the user
-    const user = await UserModel.findById(userId);
-
-    // Ensure that the user exists and is the creator of the recipe
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Check if the user is the creator of the recipe
-    if (!user.personalRecipes.includes(recipeId)) {
-      return res.status(403).json({ message: "You are not authorized to delete this recipe." });
-    }
-
     // Delete the recipe
     await RecipesModel.findByIdAndDelete(recipeId);
 
